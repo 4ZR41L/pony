@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import database from '@react-native-firebase/database';
 import {
   SafeAreaView,
   Image,
@@ -9,6 +10,16 @@ import {
   Alert,
   Platform,
 } from 'react-native';
+
+const reference = database
+  .database(
+    'https://pony-98eb5-default-rtdb.europe-west1.firebasedatabase.app/',
+  )
+  .ref('/Users/10001')
+  .once('value')
+  .then(snapshot => {
+    console.log(snapshot.val);
+  });
 
 const App = () => {
   let userID;

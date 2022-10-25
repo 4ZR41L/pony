@@ -12,6 +12,7 @@
   "dependencies": {
     "@react-native-firebase/app": "^16.2.0",
     "@react-native-firebase/auth": "^16.2.0",
+    "@react-native-firebase/database": "^16.2.0",
     "lottie-ios": "^3.4.0",
     "lottie-react-native": "^5.1.4",
     "react": "18.1.0",
