@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import {
   SafeAreaView,
   Image,
@@ -7,8 +7,15 @@ import {
   TouchableOpacity,
   Text,
 } from 'react-native';
+import database from '@react-native-firebase/database';
 
 const Register = () => {
+  const reference = database().ref('/Users');
+  database()
+    .ref('10001/')
+    .on('value', snapshot => {
+      console.log(snapshot);
+    });
   return (
     <SafeAreaView
       style={styles.background}
@@ -59,7 +66,6 @@ const styles = StyleSheet.create({
     padding: 10,
     marginVertical: 10,
     maxLength: 14,
-    minim,
   },
   btnComplete: {
     position: 'absolute',

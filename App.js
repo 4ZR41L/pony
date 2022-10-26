@@ -11,18 +11,8 @@ import {
   Platform,
 } from 'react-native';
 
-const reference = database
-  .database(
-    'https://pony-98eb5-default-rtdb.europe-west1.firebasedatabase.app/',
-  )
-  .ref('/Users/10001')
-  .once('value')
-  .then(snapshot => {
-    console.log(snapshot.val);
-  });
-
 const App = () => {
-  let userID;
+  let userID = 10001;
   let [name, setName] = useState('');
   let [surname, setSurname] = useState('');
   let [fathername, setFathername] = useState('');
@@ -35,31 +25,41 @@ const App = () => {
     os: Platform.OS,
     osVersion: Platform.Version,
     brand: Platform.__constants.Brand,
-  };
-  let userData = {
-    name: name,
-    surname: surname,
-    fathername: fathername,
-    birthdate: birthDate,
-    school: school,
-    home: home,
-    profilepicture: profilePicture,
     registrationDate: registrationDate,
-    deviceDetails: deviceDetails,
+  };
+
+  let userData = {
+    personalDetails: {
+      name: name,
+      surname: surname,
+      fathername: fathername,
+      birthdate: birthDate,
+      profilepicture: profilePicture,
+    },
+    locationDetails: {
+      school: school,
+      home: home,
+    },
+    registrationDetails: deviceDetails,
   };
 
   const completeRegistration = () => {
-    if (
-      name !== '' &&
-      surname !== '' &&
-      fathername !== '' &&
-      birthDate !== '' &&
-      school !== '' &&
-      home !== '' &&
-      profilePicture !== ''
-    ) {
+    if (name !== '' && surname !== '' && fathername !== '') {
       //register the user
-      Alert.alert('registration completed: \n ' + userData);
+
+      const reference = database().ref('/Users');
+
+      //read user count to identify userID
+
+      reference.once('value').then(snapshot => {
+        userID = snapshot.numChildren() + 10001;
+
+        //save new user to database
+        database()
+          .ref('Users/' + userID)
+          .set(userData)
+          .then(console.log(`New user ${userID} is data saved!`));
+      });
     } else {
       if (name === '' || name.length < 3) {
         Alert.alert('Xəta!', 'Məktəblinin adını daxil edin.');
@@ -106,7 +106,7 @@ const App = () => {
       <TouchableOpacity
         style={styles.btnComplete}
         onPress={() => {
-          console.log(Platform);
+          completeRegistration();
         }}>
         <Text style={styles.btnCompleteText}>Tamamla</Text>
       </TouchableOpacity>
