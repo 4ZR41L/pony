@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "160254679808",
+    "project_id": "pony-6a437",
+    "storage_bucket": "pony-6a437.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:160254679808:android:35a31a9aa22e37fd6df1e5",
+        "android_client_info": {
+          "package_name": "com.pony"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "160254679808-7k7hcn1vqhj4eglspahfk201tmlhno99.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCgPC0NIN_I56Nf1s7HR7-SK_VA8M7qriQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "160254679808-7k7hcn1vqhj4eglspahfk201tmlhno99.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
