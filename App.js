@@ -11,26 +11,38 @@ import {
   Platform,
 } from 'react-native';
 import DatePicker from 'react-native-date-picker';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 const App = () => {
   const [open, setOpen] = useState(false);
   let a = new Date();
 
   let userID = 10001;
+
   let [name, setName] = useState('');
   let [surname, setSurname] = useState('');
   let [fathername, setFathername] = useState('');
   const [birthday, setBirthday] = useState();
   const [birthdayText, setBirthdayText] = useState('Doğum tarixini seçin: ');
-  let [school, setSchool] = useState('');
-  let [home, setHome] = useState('');
-  let [profilePicture, setProfilePicture] = useState('');
+  let [school, setSchool] = useState('eeeeef');
+  let [home, setHome] = useState('eeeeef');
+  let [profilePicture, setProfilePicture] = useState();
   let registrationDate = new Date().toLocaleString();
   let deviceDetails = {
     os: Platform.OS,
     osVersion: Platform.Version,
     brand: Platform.__constants.Brand,
     registrationDate: registrationDate,
+  };
+
+  //select profile picture and when complete the registration this image will be upload to server
+
+  const selectPicture = async () => {
+    await launchImageLibrary({maxHeight: 300, maxWidth: 300}, response => {
+      if (!response.didCancel) {
+        setProfilePicture(response.assets[0].uri);
+      }
+    });
   };
 
   let userData = {
@@ -49,7 +61,13 @@ const App = () => {
   };
 
   const completeRegistration = () => {
-    if (name !== '' && surname !== '' && fathername !== '') {
+    if (
+      name !== '' &&
+      surname !== '' &&
+      fathername !== '' &&
+      birthday !== undefined &&
+      profilePicture !== undefined
+    ) {
       //register the user
 
       const reference = database().ref('/Users');
@@ -72,13 +90,13 @@ const App = () => {
         Alert.alert('Məktəblinin soyadını daxil edin.');
       } else if (fathername === '' || fathername.length < 3) {
         Alert.alert('Məktəblinin ata adını daxil edin.');
-      } else if (birthday === '' || birthday.length < 7) {
+      } else if (birthday === undefined) {
         Alert.alert('Məktəblinin doğum tarixini daxil edin.');
       } else if (school === '' || school.length < 5) {
         Alert.alert('Məktəblinin gedəcəyi məktəbi seçin.');
       } else if (home === '' || home.length < 5) {
         Alert.alert('Məktəblinin yaşadığı ünvanı seçin.');
-      } else if (profilePicture === '') {
+      } else if (profilePicture === undefined) {
         Alert.alert('Məktəblinin şəklini seçin.');
       }
     }
@@ -86,7 +104,13 @@ const App = () => {
 
   return (
     <SafeAreaView style={styles.background}>
-      <Image style={styles.profileImage} />
+      <TouchableOpacity
+        onPress={() => {
+          selectPicture();
+        }}>
+        <Image style={styles.profileImage} />
+      </TouchableOpacity>
+
       <TextInput
         style={styles.textInput}
         placeholder="Adı:"
@@ -109,7 +133,7 @@ const App = () => {
         }}
       />
       <TouchableOpacity onPress={() => setOpen(true)}>
-        <Text>{birthdayText}</Text>
+        <Text style={{fontSize: 20, color: 'white'}}>{birthdayText}</Text>
         <DatePicker
           modal
           mode="date"
