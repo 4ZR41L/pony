@@ -10,13 +10,18 @@ import {
   Alert,
   Platform,
 } from 'react-native';
+import DatePicker from 'react-native-date-picker';
 
 const App = () => {
+  const [open, setOpen] = useState(false);
+  let a = new Date();
+
   let userID = 10001;
   let [name, setName] = useState('');
   let [surname, setSurname] = useState('');
   let [fathername, setFathername] = useState('');
-  let [birthDate, setBirthDate] = useState('');
+  const [birthday, setBirthday] = useState();
+  const [birthdayText, setBirthdayText] = useState('Doğum tarixini seçin: ');
   let [school, setSchool] = useState('');
   let [home, setHome] = useState('');
   let [profilePicture, setProfilePicture] = useState('');
@@ -33,7 +38,7 @@ const App = () => {
       name: name,
       surname: surname,
       fathername: fathername,
-      birthdate: birthDate,
+      birthdate: birthday,
       profilepicture: profilePicture,
     },
     locationDetails: {
@@ -67,7 +72,7 @@ const App = () => {
         Alert.alert('Məktəblinin soyadını daxil edin.');
       } else if (fathername === '' || fathername.length < 3) {
         Alert.alert('Məktəblinin ata adını daxil edin.');
-      } else if (birthDate === '' || birthDate.length < 7) {
+      } else if (birthday === '' || birthday.length < 7) {
         Alert.alert('Məktəblinin doğum tarixini daxil edin.');
       } else if (school === '' || school.length < 5) {
         Alert.alert('Məktəblinin gedəcəyi məktəbi seçin.');
@@ -103,6 +108,33 @@ const App = () => {
           setFathername(text);
         }}
       />
+      <TouchableOpacity onPress={() => setOpen(true)}>
+        <Text>{birthdayText}</Text>
+        <DatePicker
+          modal
+          mode="date"
+          open={open}
+          date={new Date()}
+          confirmText={'Seç'}
+          cancelText={'Bağla'}
+          textColor={'orange'}
+          onConfirm={date => {
+            let customDateFormat =
+              date.getDate() +
+              '-' +
+              (date.getMonth() + 1) +
+              '-' +
+              date.getFullYear();
+            setBirthday(customDateFormat);
+            setBirthdayText(customDateFormat);
+
+            setOpen(false);
+          }}
+          onCancel={() => {
+            setOpen(false);
+          }}
+        />
+      </TouchableOpacity>
       <TouchableOpacity
         style={styles.btnComplete}
         onPress={() => {
