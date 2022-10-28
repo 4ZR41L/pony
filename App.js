@@ -9,13 +9,14 @@ import {
   Text,
   Alert,
   Platform,
+  View,
 } from 'react-native';
 import DatePicker from 'react-native-date-picker';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import {launchImageLibrary} from 'react-native-image-picker';
+import LinearGradient from 'react-native-linear-gradient';
 
 const App = () => {
   const [open, setOpen] = useState(false);
-  let a = new Date();
 
   let userID = 10001;
 
@@ -26,7 +27,7 @@ const App = () => {
   const [birthdayText, setBirthdayText] = useState('Doğum tarixini seçin: ');
   let [school, setSchool] = useState('eeeeef');
   let [home, setHome] = useState('eeeeef');
-  let [profilePicture, setProfilePicture] = useState();
+  let [profilePicture, setProfilePicture] = useState('');
   let registrationDate = new Date().toLocaleString();
   let deviceDetails = {
     os: Platform.OS,
@@ -103,62 +104,119 @@ const App = () => {
   };
 
   return (
-    <SafeAreaView style={styles.background}>
-      <TouchableOpacity
-        onPress={() => {
-          selectPicture();
+    <SafeAreaView style={{flex: 1}}>
+      <View
+        style={{
+          height: '50%',
+          flexDirection: 'column',
+          justifyContent: 'flex-start',
+          alignItems: 'center',
+          width: '100%',
+          padding: 10,
         }}>
-        <Image style={styles.profileImage} />
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            zIndex: 2,
+            elevation: Platform.OS === 'android' ? 50 : 0,
 
-      <TextInput
-        style={styles.textInput}
-        placeholder="Adı:"
-        onChangeText={text => {
-          setName(text);
-        }}
-      />
-      <TextInput
-        style={styles.textInput}
-        placeholder="Soyadı:"
-        onChangeText={text => {
-          setSurname(text);
-        }}
-      />
-      <TextInput
-        style={styles.textInput}
-        placeholder="Ata adı:"
-        onChangeText={text => {
-          setFathername(text);
-        }}
-      />
-      <TouchableOpacity onPress={() => setOpen(true)}>
-        <Text style={{fontSize: 20, color: 'white'}}>{birthdayText}</Text>
-        <DatePicker
-          modal
-          mode="date"
-          open={open}
-          date={new Date()}
-          confirmText={'Seç'}
-          cancelText={'Bağla'}
-          textColor={'orange'}
-          onConfirm={date => {
-            let customDateFormat =
-              date.getDate() +
-              '-' +
-              (date.getMonth() + 1) +
-              '-' +
-              date.getFullYear();
-            setBirthday(customDateFormat);
-            setBirthdayText(customDateFormat);
+            backgroundColor: '#BFACE0',
+            borderRadius: 100,
+          }}
+          onPress={() => {
+            selectPicture();
+          }}>
+          <Image
+            style={styles.profileImage}
+            source={
+              profilePicture === ''
+                ? require('./src/images/camera-icon.png')
+                : {uri: profilePicture}
+            }
+          />
+        </TouchableOpacity>
+        <LinearGradient
+          colors={['#BFACE0', '#A084CA', '#645CAA']}
+          style={styles.background}>
+          <View style={{flex: 1, flexDirection: 'row'}}>
+            <View
+              style={{
+                flex: 1,
+                flexDirection: 'column',
+                zIndex: 1,
+              }}>
+              <TextInput
+                style={styles.textInput}
+                placeholder="Ad:"
+                onChangeText={text => {
+                  setName(text);
+                }}
+              />
+              <TextInput
+                style={styles.textInput}
+                placeholder="Soyad:"
+                onChangeText={text => {
+                  setSurname(text);
+                }}
+              />
+              <TextInput
+                style={styles.textInput}
+                placeholder="Ata adı:"
+                onChangeText={text => {
+                  setFathername(text);
+                }}
+              />
+            </View>
+            <View
+              style={{
+                flex: 1,
+                height: '100%',
+                justifyContent: 'flex-start',
+                alignItems: 'flex-end',
+                paddingTop: 10,
+              }}>
+              <TouchableOpacity onPress={() => setOpen(true)}>
+                <Text style={styles.birthdayText}>{birthdayText}</Text>
 
-            setOpen(false);
-          }}
-          onCancel={() => {
-            setOpen(false);
-          }}
-        />
-      </TouchableOpacity>
+                <DatePicker
+                  modal
+                  mode="date"
+                  open={open}
+                  date={new Date()}
+                  confirmText={'Seç'}
+                  cancelText={'Bağla'}
+                  textColor={'orange'}
+                  onConfirm={date => {
+                    let customDateFormat =
+                      date.getDate() +
+                      '-' +
+                      (date.getMonth() + 1) +
+                      '-' +
+                      date.getFullYear();
+                    setBirthday(customDateFormat);
+                    setBirthdayText(customDateFormat);
+
+                    setOpen(false);
+                  }}
+                  onCancel={() => {
+                    setOpen(false);
+                  }}
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View
+            style={{
+              backgroundColor: 'red',
+              width: '100%',
+              padding: 5,
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}>
+            <Text style={{color: 'black', fontSize: 20}}>salam</Text>
+          </View>
+        </LinearGradient>
+      </View>
+
       <TouchableOpacity
         style={styles.btnComplete}
         onPress={() => {
@@ -173,32 +231,76 @@ export default App;
 
 const styles = StyleSheet.create({
   background: {
-    backgroundColor: 'orange',
     flex: 1,
-    opacity: 0.8,
+    flexDirection: 'column',
+    position: 'absolute',
+    top: 100,
+    zIndex: 1,
+    width: '100%',
+    height: 'auto',
+    paddingRight: 5,
+    paddingBottom: 5,
+    paddingTop: 60,
     alignItems: 'center',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
+    borderWidth: 0,
+    borderRadius: 20,
+    shadowColor: '#645CAA',
+    shadowOffset: {
+      width: 0,
+      height: 9,
+    },
+    shadowOpacity: 0.48,
+    shadowRadius: 11.95,
+    elevation: 10,
   },
   profileImage: {
     width: 150,
     height: 150,
     borderRadius: 100,
-    borderWidth: 2,
-    borderColor: 'white',
-    marginVertical: 20,
+
+    borderWidth: 1,
+    shadowColor: '#645CAA',
+    shadowOffset: {
+      width: 0,
+      height: 9,
+    },
+    shadowOpacity: 0.48,
+    shadowRadius: 11.95,
+    elevation: 10,
   },
   textInput: {
-    width: 200,
-    fontsize: 20,
+    width: 180,
+    borderTopRightRadius: 20,
+    borderBottomRightRadius: 20,
+    borderColor: '#645CAA',
+    fontsize: 16,
+    alignSelf: 'center',
     color: 'black',
     fontWeight: 'bold',
     backgroundColor: 'white',
-    borderRadius: 10,
-    borderWidth: 2,
-    borderColor: 'white',
-    padding: 10,
-    marginVertical: 10,
+    paddingHorizontal: 15,
+    marginVertical: 5,
     maxLength: 14,
+    shadowColor: '#ffffff',
+    shadowOffset: {
+      width: 0,
+      height: 9,
+    },
+    shadowOpacity: 0.48,
+    shadowRadius: 11.95,
+    elevation: 15,
+  },
+  birthdayText: {
+    fontSize: 16,
+    color: 'black',
+    backgroundColor: 'white',
+    borderColor: '#645CAA',
+    width: 180,
+    borderTopLeftRadius: 20,
+    borderBottomLeftRadius: 20,
+    padding: 5,
+    paddingHorizontal: 10,
   },
   btnComplete: {
     position: 'absolute',
@@ -209,7 +311,7 @@ const styles = StyleSheet.create({
     borderColor: 'white',
     borderWidth: 2,
     borderRadius: 10,
-    backgroundColor: 'transparent',
+    backgroundColor: 'black',
     elevation: 20,
     shadowColor: 'white',
     shadowOffset: 10,
