@@ -17,6 +17,7 @@ target 'pony' do
     # we make it explicit here to aid in the React Native upgrade process.
     :hermes_enabled => true,
     :fabric_enabled => flags[:fabric_enabled],
+
     # Enables Flipper.
     #
     # Note that if you have use_frameworks! enabled, Flipper will not work and
@@ -25,6 +26,8 @@ target 'pony' do
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
+
+use_frameworks! :linkage => :static
 
   target 'ponyTests' do
     inherit! :complete
@@ -36,7 +39,8 @@ target 'pony' do
       installer,
       # Set `mac_catalyst_enabled` to `true` in order to apply patches
       # necessary for Mac Catalyst builds
-      :mac_catalyst_enabled => false
+      :mac_catalyst_enabled => false,
+	
     )
     __apply_Xcode_12_5_M1_post_install_workaround(installer)
   end
